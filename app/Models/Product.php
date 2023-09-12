@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class Product extends Model
 {
     use HasFactory;
+    protected $fillable=['name','image','price','description','offer','status','sub_category_id','quantity'];
+    public const PATH="images/products";
 }

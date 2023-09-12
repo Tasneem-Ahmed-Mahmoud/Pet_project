@@ -16,12 +16,14 @@ dd('suppliers');
     }
     public function store(SupplierRequest $request)
     {
-        $attachment = uploadImage($request->attachment, Supplier::PATH);
-        $supplier = Supplier::create([
-            'name' => $request->name,
-            'attachment' => $attachment,
-            'commercial_name' => $request->commercial_name,
-        ]);
-        return responseSuccessData($supplier, 'supplier created successfully');
+        dd($request);
+        // $attachment = uploadImage($request->attachment, Supplier::PATH);
+        // $supplier = Supplier::create([
+        //     'name' => $request->name,
+        //     'attachment' => $attachment,
+        //     'commercial_name' => $request->commercial_name,
+        // ]);
+        // $supplier->sub_services()->attach($request->sub_service_ids);
+        // return responseSuccessData($supplier, 'supplier created successfully');
     }
 }

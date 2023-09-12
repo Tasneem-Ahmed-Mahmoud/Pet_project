@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Requests\Api;
+namespace App\Http\Requests\Dashboard;
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\Http\Requests\Api\BaseFormRequest;
+
 
 class ServiceRequest extends BaseFormRequest
 {
@@ -11,7 +12,7 @@ class ServiceRequest extends BaseFormRequest
     {
         return [
             'image'=>'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'name'=>'required|max:40|unique:services,name,'.$this->id,
+            'name'=>'required|max:40|unique:services,name,except,id',
             'description'=>'required|max:300'
         ];
     }

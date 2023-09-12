@@ -20,10 +20,8 @@ return new class extends Migration
             $table->decimal('offer');
             $table->integer('quantity');
             $table->enum('status',['approved','unapproved'])->default('unapproved');
-            //$table->unsignedBigInteger('pet_type_id');
             $table->unsignedBigInteger('sub_category_id');
             $table->foreign('sub_category_id')->references('id')->on('sub_categories')->onDelete('cascade');
-            // $table->foreign('pet_type_id')->references('id')->on('pet_types')->onDelete('cascade');
             $table->timestamps();
         });
     }

@@ -1,11 +1,13 @@
 <?php
 
-use App\Http\Controllers\Api\Auth\UserAuthController;
-use App\Http\Controllers\Api\CityController;
-use App\Http\Controllers\Api\GovernorateController;
-use App\Http\Controllers\Api\SupplierController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\CityController;
+use App\Http\Controllers\Api\ProductController;
+use App\Http\Controllers\Api\SupplierController;
+use App\Http\Controllers\Api\GovernorateController;
+use App\Http\Controllers\Api\Auth\UserAuthController;
+use App\Http\Controllers\Api\Auth\SupplierAuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,9 +23,19 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-// ###################authentication#############################
-Route::post('register',[UserAuthController::class,'register']);
-Route::post('login',[UserAuthController::class,'login']);
+// ################### User authentication#############################
+Route::controller(UserAuthController::class)->prefix('users')->group(function(){
+    Route::post('register','register');
+    Route::post('/login','login');
+    Route::post('logout','logout');
+    
+});
+Route::controller(SupplierAuthController::class)->prefix('suppliers')->group(function(){
+    Route::post('register','register');
+    Route::post('/login','login');
+    Route::post('logout','logout');
+    
+});
 
 // ###################Governorate#############################
 Route::get('governorates',[GovernorateController::class,'index'])->middleware('auth:user');
@@ -33,3 +45,9 @@ Route::get('cities/{governorate_id}',[CityControllerControllerController::class,
 // ###################Suppliers#############################
 Route::post('suppliers',[ SupplierController::class,'store']);
 Route::get('suppliers',[ SupplierController::class,'index']);
+
+  ####################products#################################
+  Route::controller(ProductController::class)->prefix('products')->group(function () {
+    Route::get('/', 'index');
+    Route::post('/', 'store');
+});

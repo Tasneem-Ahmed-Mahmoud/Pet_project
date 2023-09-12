@@ -1,65 +1,40 @@
 <?php
 
-
- 
 namespace App\Http\Controllers\Api\Auth;
- 
-use JWTAuth;
 
-use Tymon\JWTAuth\Exceptions\JWTException;
-use Symfony\Component\HttpFoundation\Response;
 use App\Models\User;
 use Illuminate\Http\Request;
-
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
+use App\Http\Middleware\user as MiddlewareUser;
 use Illuminate\Support\Facades\Hash;
-use App\Http\Requests\Api\Auth\UserLoginRequest;
+use App\Http\Requests\Api\PhotoRequest;
+use App\Http\Requests\Api\Auth\LoginRequest;
 use App\Http\Requests\Api\Auth\UserRegisterRequest;
 
 class UserAuthController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:user', ['except' => ['login', 'register']]);
+    }
 
-
-
-    public function login(UserLoginRequest $request)
+    public function login(LoginRequest $request)
     {
 
+        if (!$token = auth()->guard('user')->attempt($request->only(['email', 'password']))) {
 
-        $input = $request->only('email', 'password');
-        $jwt_token = null;
-  
-        if (!$jwt_token = JWTAuth::attempt($input)) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Invalid Email or Password',
-            ]);
+            return responseErrorMessage('Unauthorized', 401);
         }
-  
-        return response()->json([
-            'success' => true,
-            'token' => $jwt_token,
-        ]);
 
-        // $credentials = $request->only('email', 'password');
-        // $token = Auth::attempt($credentials);
-        // if (!$token) {
-        //     return  responseErrorMessage('Unauthorized', 401);
-        // }
-        // $user = Auth::user();
-        // return responseSuccessData([
-        //     'user' => $user,
-        //     'authorization' => [
-        //         'token' => $token,
-        //         'type' => 'bearer',
-        //     ]
-        // ]);
+        return responseSuccessData([
+            'token' => $token
+        ]);
     }
     public function register(UserRegisterRequest $request)
     {
 
         $user = User::create([
-            'image'=>$request->image,
+            // 'image' =>$request->file('image')->store(User::PATH),
             'name' => $request->name,
             'email' => $request->email,
             'phone' => $request->phone,
@@ -70,15 +45,12 @@ class UserAuthController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-            return responseSuccessMessage("User created successfully", 201);
-       
+        return responseSuccessMessage("User created successfully", 201);
     }
 
     public function logout()
     {
-        Auth::gourd('user')->logout();
-        return response()->json([
-            'message' => 'Successfully logged out',
-        ]);
+        auth()->guard('user')->logout();
+        return responseSuccessData('User Successfully logged out');
     }
 }

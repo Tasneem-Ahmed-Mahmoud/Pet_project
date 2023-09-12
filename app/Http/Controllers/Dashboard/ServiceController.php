@@ -11,9 +11,18 @@ class ServiceController extends Controller
 {
     //
 
+    public function index(){
+        $services=Service::paginate(20,['id','name']);
+        return responseSuccessData($services);
+    }
     public function store(ServiceRequest $request){
 
         $service=Service::create($request->validated());
         return responseSuccessData($service);
     }
+
+
+
+
+    
 }

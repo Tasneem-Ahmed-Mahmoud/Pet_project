@@ -5,7 +5,7 @@ namespace App\Http\Requests\Api\Auth;
 use App\Http\Requests\Api\BaseFormRequest;
 
 
-class UserLoginRequest extends BaseFormRequest
+class LoginRequest extends BaseFormRequest
 {
     
     public function rules(): array

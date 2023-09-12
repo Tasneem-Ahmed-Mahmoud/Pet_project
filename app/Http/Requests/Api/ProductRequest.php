@@ -2,27 +2,21 @@
 
 namespace App\Http\Requests\Api;
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\Http\Requests\Api\BaseFormRequest;
 
-class ProductRequest extends FormRequest
+class ProductRequest extends BaseFormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
-    public function authorize(): bool
-    {
-        return false;
-    }
-
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array|string>
-     */
     public function rules(): array
     {
-        return [
-            //
-        ];
+        return[
+        'name'=>'required|min:3|max:50',
+        'image'=>'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        'price'=>'required|numeric',
+        'description'=>'required|max:500|min:10',
+        'offer'=>'required|numeric',
+        'sub_category_id'=>'required|exists:sub_categories,id',
+        'quantity'=>'required|integer'
+    ];
+    
     }
 }
